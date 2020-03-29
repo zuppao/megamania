@@ -1,0 +1,56 @@
+class Hamburger {
+//function Hamburger(_x,_y) {
+	constructor(_x,_y,_speed) {
+		this.speed = _speed;
+    	this.x = _x;
+    	this.y = _y;
+    	this.width = 30;
+    	this.height = 16;
+    	
+
+    	this.enemyColor = color(192,112,176);
+    	this.windowPos = {
+  			x : this.x,
+  			y : this.y
+  		}
+    //this.Show = function () {
+    //	fill(255, 0, 200);
+    //    rect(this.x, this.y, this.width, this.height);    
+    //}
+	}
+
+    Show = function () {
+    	//fill(255, 0, 200);
+        //rect(this.x, this.y, this.width, this.height);    
+        noStroke();
+		
+
+		//---------------------------
+        fill(this.enemyColor);
+        rect(this.x+7, this.y,this.width/2,this.height);
+        rect(this.x, this.y+2,this.width,this.height-4);
+
+        fill(0);
+        rect(this.x-1, this.y+4,this.width+2,this.height-8);
+
+        fill(this.enemyColor);
+		rect(this.windowPos.x, this.windowPos.y,8,this.height-12);
+		rect(this.windowPos.x+3+8, this.windowPos.y,8,this.height-12);
+		rect(this.windowPos.x+6+16, this.windowPos.y,8,this.height-12);
+        //---------------------------
+    }
+
+
+    Move = function () {
+		if(this.x<= -this.width){
+			this.x = width;
+		}
+
+    	this.x-=2*this.speed;
+    	this.windowPos = {
+  			x : this.x,
+  			y : this.y+6
+  		}
+    }
+
+}

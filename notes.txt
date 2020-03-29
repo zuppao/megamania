@@ -1,0 +1,12 @@
+Levels:
+
+No	Enemy		Points (1st time round)
+--------------------------------------------------
+1	Hamburger	20
+2	Cookie		30
+3	Bug		40
+4	Radial Tire	50
+5	Diamond		60
+6	Steam Iron	70
+7	Bow Tie		80
+8	Dice		90
