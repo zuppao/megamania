@@ -14,7 +14,7 @@ class Enterprise {
     		y: this.y-10
     	}
     	this.passedTime=0
-    	this.energy=100;
+    	this.energy=0;
     	this.collider = {
     		x1: this.x+7,
     		y1: this.y+2,
