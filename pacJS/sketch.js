@@ -1,35 +1,49 @@
 //https://p5js.org/reference
-// http://www.atari2600.com.br/Sites/Atari/AtariFull.aspx
+// http://www.atari2600.com.br/Atari/Roms/01mL/Megamania
 // criar uma funcao pra quando matar todos os enemies...
 //
 // -> Backlog <-
 //  - desenhar nave original e deixar disponivel
-//  - verificar original se mostra a nave enquanto ta esvaziando e enxendo tanque
-//  - animação pra quando nave for atingida
-//  - add sound effects
+//  - clean-up
 
 //var ship;
 var hud;
 var shipBullet;
 var hamburgers = [];
-var enemyBullets = []
+var enemyBullets = [];
 
 var xwing;
 var teste;
 var stopGame, gameOver, pauseGame, gameStep;
 var lives;
 var score;
-var elapsedTime;
+var sfxEmptying, sfxEnemyHit, sfxLoad, sfxShipHit, sfxShipShoot, sfxEmptyingLoop;
+var elapsedTime, shipHitElapsedTime;
 var elapsedPoints;
 const GAMESTEPS = {
     FUELLING: 'fuelling',
     EMPTYING: 'emptying',
     PLAYING: 'playing',
+    SHIP_HIT: 'ship_hit',
     PAUSED: 'paused',
     RESET: 'reset',
     RESTART: 'restart'
 
 };
+
+
+function preload(){
+    soundFormats('wav');
+    this.sfxEmptying = loadSound('sfx/emptying');
+    this.sfxEmptyingLoop = new p5.SoundLoop(function (){
+                                                sfxEmptying.play();
+                                            },0.45);
+    this.sfxEnemyHit = loadSound('sfx/enemyHit');
+    this.sfxLoad = loadSound('sfx/load');
+    this.sfxShipHit = loadSound('sfx/shipHit');
+    this.sfxShipShoot =loadSound('sfx/shipShoot');
+}
+
 
 function setup() {
     //atari resolution... [160x192] [192,224]
@@ -38,6 +52,7 @@ function setup() {
     this.hud = new HUD();
     this.shipBullet = null;
     this.xwing = new Enterprise((width/2)-16,232);
+    this.RepositionShip();
     this.teste = new Teste(200,228);
     //frameRate(120);//120
 
@@ -51,11 +66,16 @@ function setup() {
     this.gameStep = GAMESTEPS.RESET;
 
     this.elapsedTime=0;
+    this.shipHitElapsedTime=0;
     //for (var i = 0; i < 6; i++) {
     //    this.hamburgers[i] = new Hamburger(width+(100*i),10,1);
     //    this.hamburgers[i+6] = new Hamburger(width+(100*i)+50,34,1);
     //    this.hamburgers[i+12] = new Hamburger(width+(100*i),58,1);
     //}
+
+    //teste.....
+    
+    
 }
 
 function draw() {
@@ -81,13 +101,14 @@ function draw() {
         //console.log('rotinas..');
         this.elapsedTime+=deltaTime;
         if(this.elapsedTime>=20){
+            this.shipHitElapsedTime+=this.elapsedTime;
             this.elapsedTime=0;
 
 
 
             switch(this.gameStep){
                 case GAMESTEPS.FUELLING:
-                    this.xwing.energy+=2;
+                    this.xwing.energy+=2.5;
                     //console.log(this.xwing.energy);
                     if(this.xwing.energy>=100){
                         //this.gameStep = GAMESTEPS.RESET;
@@ -103,16 +124,28 @@ function draw() {
 
                     if(this.xwing.energy<=0){
                         this.xwing.energy=0;
+                        this.sfxEmptyingLoop.stop();
                         this.gameStep = GAMESTEPS.RESET;
+                    }
+                    break;
+                case GAMESTEPS.SHIP_HIT:
+                    //animacao...
+                    //console.log(this.shipHitElapsedTime);
+                    if(this.shipHitElapsedTime>4000){
+                        this.shipHitElapsedTime=0;
+                        this.gameStep = GAMESTEPS.RESTART;
+                        this.xwing.shipHit=false;
+                        this.RepositionShip();
                     }
                     break;
                 case GAMESTEPS.RESTART:
                     this.Restart();
                     this.gameStep = GAMESTEPS.FUELLING;
+                    this.sfxLoad.play();
                     break;
                 case GAMESTEPS.RESET:                
                     //this.elapsedTime=0;
-                    this.RepositionShip();
+                    //this.RepositionShip();
                     for (var i = 0; i < 6; i++) {
                         this.hamburgers[i] = new Hamburger(width+(100*i),10,1);
                         this.hamburgers[i+6] = new Hamburger(width+(100*i)+50,34,1);
@@ -121,6 +154,7 @@ function draw() {
                     //this.stopGame=false;
                     //this.gameStep = GAMESTEPS.PLAYING;
                     this.gameStep = GAMESTEPS.FUELLING;
+                    this.sfxLoad.play();
                     break;
 
             }
@@ -181,6 +215,7 @@ function draw() {
 
            for (var j = 0; j < this.hamburgers.length; j++) {
                 if (this.shipBullet.Hits(this.hamburgers[j])) {
+                    this.sfxEnemyHit.play();
                     this.shipBullet=null;
                     this.hamburgers.splice(j,1);
                     this.score+=20;this.elapsedPoints+=20;
@@ -209,10 +244,10 @@ function draw() {
         }
 
 
-        this.xwing.Show();
+        //this.xwing.Show();
 
     }
-
+    this.xwing.Show();
 
     if(this.elapsedPoints>=4000){
         this.elapsedPoints=0;
@@ -250,6 +285,7 @@ function Update() {
         //next stage......
         this.stopGame=true;
         this.gameStep = GAMESTEPS.EMPTYING;
+        this.sfxEmptyingLoop.start();
         //this.YouWon();
     }
 }
@@ -262,6 +298,7 @@ function keyPressed() {
 
 	if (key === ' ' && this.shipBullet === null) {
         this.shipBullet = new ShipBullet(this.xwing.cannon.x, this.xwing.cannon.y);
+        this.sfxShipShoot.play();
     }
 
     if(key === 'Control'){
@@ -273,7 +310,8 @@ function keyPressed() {
         }
 
 
-
+        //teste.....
+        this.sfxEmptyingLoop.stop();
         //this.gameStep = 'paused';
     }
 }
@@ -287,11 +325,12 @@ function ShipHit() {
         this.GameOver();
         return;
     }
-
+    this.xwing.shipHit=true;
     //Repositioning();
     //this.enemyBullets.splice(0,this.enemyBullets.length);
     //this.xwing.energy=0;
-    this.gameStep = GAMESTEPS.RESTART;
+    this.gameStep = GAMESTEPS.SHIP_HIT;
+    this.sfxShipHit.play();
 }
 
 //eliminat essa funcao
@@ -311,7 +350,7 @@ function Restart() {
     for (var i = 0; i < this.hamburgers.length; i++) {
         this.hamburgers[i].x += width;
     }
-    this.RepositionShip();    
+    //this.RepositionShip();    
 }
 
 function RepositionShip(){

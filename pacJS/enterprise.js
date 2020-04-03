@@ -3,11 +3,23 @@ class Enterprise {
 	constructor(_x,_y){
 		var cannon;
 		var passedTime, energy;
+        var shipHit;
+
+        
+        this.shipHitColorArray=[color(56,64,176),
+                               color(74,86,240),
+                               color(165,184,251),
+                               color(255,255,255),
+                               color(165,184,251),
+                               color(74,86,240)];
+        this.shipHitColorArrayIdx=0;
+
 		this.x = _x;
     	this.y = _y;
 		this.width=32;
 	    this.height=42;
     	this.foreColor = color(56,64,176);
+        this.shipHit = false;
     	
     	this.cannon =  {
 	    	x: this.x+(this.width/2),
@@ -16,10 +28,10 @@ class Enterprise {
     	this.passedTime=0
     	this.energy=0;
     	this.collider = {
-    		x1: this.x+7,
-    		y1: this.y+2,
-    		x2: this.x+7+this.width-14,
-    		y2: this.y+2+this.height-8
+    		x1: this.x+5,
+    		y1: this.y+3,
+    		x2: this.x+5+this.width-10,
+    		y2: this.y+3+this.height-6
     	}
 	}
 
@@ -31,14 +43,9 @@ class Enterprise {
 
 
     Show = function () {
-    	this.Update();
-       	
-		stroke(240);
-
-		//strokeWeight(1);
-		//noFill();
-		//rect(this.x+7,this.y+2,this.width-14,this.height-8);
-		fill(this.foreColor);
+        this.Update();
+        stroke(240);
+        fill(this.foreColor);
 		//---------------------------
 		strokeWeight(2);
 		line(this.x+(this.width/2),this.y+(this.height/2),
@@ -57,11 +64,31 @@ class Enterprise {
     }
 
     Update = function (){
-    	this.passedTime+=deltaTime;
+        this.passedTime+=deltaTime;
+
+
+        if(this.shipHit){
+            if(this.passedTime>=100){
+                this.passedTime=0;
+                this.foreColor = this.shipHitColorArray[this.shipHitColorArrayIdx];
+                if(this.shipHitColorArrayIdx==3){
+                    this.shipHitColorArrayIdx=0;
+                }else{
+                    this.shipHitColorArrayIdx++;
+                }
+
+            }
+            return;
+        }
+    	this.foreColor = color(56,64,176);
+
     	if(this.passedTime>=500){
     		//console.log('meio segundo');
     		this.passedTime=0;
     		this.energy-=1.11;
+
+            //default
+            
     	}
     }
 
