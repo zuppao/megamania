@@ -2,11 +2,13 @@ class Hamburger {
 //function Hamburger(_x,_y) {
 	constructor(_x,_y,_speed) {
 		this.speed = _speed;
+        var passedTime, downStep, downTimes;
     	this.x = _x;
     	this.y = _y;
     	this.width = 30;
     	this.height = 16;
-    	
+    	this.passedTime=0;
+        this.downStep=8;this.downTimes=0;
 
     	this.enemyColor = color(192,112,176);
     	this.windowPos = {
@@ -20,6 +22,7 @@ class Hamburger {
 	}
 
     Show = function () {
+        this.Update();
     	//fill(255, 0, 200);
         //rect(this.x, this.y, this.width, this.height);    
         noStroke();
@@ -40,6 +43,22 @@ class Hamburger {
         //---------------------------
     }
 
+    Update = function (){
+        this.passedTime+=deltaTime;
+
+        if(this.passedTime>=5000){
+            this.passedTime=0;
+            this.y+=this.downStep;
+            this.downTimes++;
+            if(this.downTimes===3){
+                this.downTimes=0;
+                this.downStep*=-1;
+            }
+        }
+
+
+
+    }
 
     Move = function () {
 		if(this.x<= -this.width){

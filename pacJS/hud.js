@@ -66,11 +66,9 @@ class HUD {
 
         //Lives....
         for(var i=0;i<_lives;i++){
-        	Enterprise.ShowLive(this.energyBar.x+16+(i*42),this.energyBar.y+7.5);	
+        	Ship.ShowLive(this.energyBar.x+16+(i*42),this.energyBar.y+12);
         }
-		//Enterprise.ShowLive(this.energyBar.x+16,this.energyBar.y+7.5);
-		//Enterprise.ShowLive(this.energyBar.x+58,this.energyBar.y+7.5);
-        //Enterprise.ShowLive(this.energyBar.x+100,this.energyBar.y+7.5);
+
 	}
 
 }
