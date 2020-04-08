@@ -74,7 +74,6 @@ function draw() {
 
     if(this.gameStep === GAMESTEPS.PLAYING) this.Update();
 
-
     if(this.stopGame){
         this.elapsedTime+=deltaTime;
         
@@ -236,7 +235,6 @@ function keyPressed() {
         } else if(this.gameStep === GAMESTEPS.PAUSED){
             this.gameStep = GAMESTEPS.PLAYING;
         }
-
     }
 }
 
@@ -244,10 +242,6 @@ function keyPressed() {
 function ShipHit() {
     this.stopGame=true;
     this.lives-=1;
-    /*if(this.lives<0){
-        this.GameOver();
-        return;
-    }*/
     this.ship.shipHit=true;
     this.gameStep = GAMESTEPS.SHIP_HIT;
     this.sfxShipHit.play();
