@@ -1,7 +1,7 @@
 # Megamania
 _Megamania tribute game using only P5js (Javascript)_
 
-This is an Atari´s game made by [**Activision**](https://www.activision.com) back on 1982 ([**Megamania**](https://en.wikipedia.org/wiki/Megamania)). I realy love this game and I grew up playing it (and a couple of others) with my mother and my uncle.
+This is an Atari´s game made by [**Activision**](https://www.activision.com) back on 1982 ([**Megamania**](https://en.wikipedia.org/wiki/Megamania)). I really love this game, I grew up playing it (and a couple of others) with my mother and my uncle.
 This is my very simple tribute to the original one. ACTIVISION, please don´t get me wrong because the joking with your company name (and my name). Activison, I ❤ you!
 
 The controls is pretty simple ~~_but I forgot to put it on the screen, sorry by my fault_~~:
