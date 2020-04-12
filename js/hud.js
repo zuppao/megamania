@@ -22,7 +22,6 @@ class EnergyBar {
 
 class HUD {
 	constructor(){
-		var energyBar;
 		this.width = 540;
     	this.height = 60;
     	this.x = (width / 2) - (this.width/2);
@@ -34,31 +33,25 @@ class HUD {
 	Show = function (_lives,_score,_energy){
 		//backgrount
 		fill(144,144,144);
-        rect(this.x, this.y, this.width, this.height);
+		rect(this.x, this.y, this.width, this.height);
 
         //Energy Bar
         this.energyBar.Show(_energy);
 
         //'ENERGY' string...
         fill(0);
-        //textStyle(BOLD);
-        textFont('Wide Latin');
-        textSize(11);
+        textSize(14);
         textAlign(LEFT);
-        text('ENERGY',this.x+40,this.y+14);
+        text('ENERGY',this.x+65,this.y+15);
 		
         //Score
 		fill(28,32,156);
-        //textStyle(BOLD);
-        textFont('Wide Latin');
-        textSize(20);
+        textSize(22);
         textAlign(RIGHT);
         text(_score,(width/2)+130,this.y+55);
 
         //'joke' string
         fill(160,160,52);
-        textStyle(BOLDITALIC);
-		textFont('Arial');
 		textSize(12);
 		textAlign(LEFT);
         text('ZUPTIVISION',this.x+60,this.y+74);
