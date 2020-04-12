@@ -1,9 +1,8 @@
 //https://p5js.org/reference
 // http://www.atari2600.com.br/Atari/Roms/01mL/Megamania
-// criar uma funcao pra quando matar todos os enemies...
 //
 // -> Backlog <-
-//  - clean-up
+// 
 
 var hud;
 var shipBullet;
@@ -17,6 +16,7 @@ var score;
 var sfxEmptying, sfxEnemyHit, sfxLoad, sfxShipHit, sfxShipShoot, sfxEmptyingLoop;
 var elapsedTime, shipHitElapsedTime;
 var elapsedPoints;
+var fontRetro;
 const GAMESTEPS = {
     FUELLING: 'fuelling',
     EMPTYING: 'emptying',
@@ -38,11 +38,14 @@ function preload(){
     this.sfxLoad = loadSound('sfx/load');
     this.sfxShipHit = loadSound('sfx/shipHit');
     this.sfxShipShoot =loadSound('sfx/shipShoot');
+    this.fontRetro = loadFont('lib/Retro_Gaming.ttf');
 }
 
 function setup() {
     //atari resolution... [160x192] [192,224]
-    createCanvas(570,356);
+    var canvas = createCanvas(570,356);
+    canvas.parent('sketchHolder');
+
 
     this.hud = new HUD();
     this.shipBullet = null;
@@ -59,6 +62,8 @@ function setup() {
 
     this.elapsedTime=0;
     this.shipHitElapsedTime=0;
+    textFont(this.fontRetro);
+    console.log(this.fontRetro);
 }
 
 function draw() {
@@ -199,11 +204,11 @@ function draw() {
 function Update() {
     if(this.stopGame) return;
 
-    if (keyIsDown(RIGHT_ARROW) && 
+    if ( (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) && 
         (this.ship.x+this.ship.width)<(this.hud.x+this.hud.width)) {
         this.ship.Move(0.5);
     }
-    if (keyIsDown(LEFT_ARROW) &&
+    if ( (keyIsDown(LEFT_ARROW) || keyIsDown(65)) &&
         this.ship.x>this.hud.x) {
         this.ship.Move(-0.5);
     }
@@ -224,7 +229,7 @@ function Update() {
 function keyPressed() {
     if(this.stopGame) return;
 
-	if (key === ' ' && this.shipBullet === null) {
+	if ((key === 'ArrowUp' || key === ' ') && this.shipBullet === null) {
         this.shipBullet = new ShipBullet(this.ship.cannon.x, this.ship.cannon.y);
         this.sfxShipShoot.play();
     }
@@ -258,13 +263,13 @@ function Restart() {
 
 function RepositionShip(){
     this.ship.x = (width/2)-16;
-    this.ship.y = 232;   
+    this.ship.y = 232;
+    this.ship.SetCannon();
 }
 
 function ScreenMessage(_text){
         noStroke();
         fill(10,200,20);
-        textFont('Verdana');
         textSize(36);
         text(_text,150,height/2);    
 }
