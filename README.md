@@ -5,11 +5,11 @@ This is an Atari´s game made by [**Activision**](https://www.activision.com) ba
 This is my very simple tribute to the original one. ACTIVISION, please don´t get me wrong because the joking with your company name (and my name). Activison, I ❤ you!
 
 The controls is pretty simple ~~_but I forgot to put it on the screen, sorry by my fault_ (yeah, fixed)~~:
-- Move horizontally with the ARROW KEYS: ⬅➡ or with the A / D keys
-- Shoot with the SPACE BAR or the ⬆ key
-- Pause the game with the CTRL key
+- Move horizontally with ARROW KEYS: ⬅➡ or with A / D keys
+- Shoot with SPACE BAR or ⬆ key
+- Pause the game with CTRL key
 
-The game loops on the first enemy/phase so, when you kill them all, it will be reloaded.
+The game always loops with the first enemy/phase so, when you kill them all, it will be reloaded.
 This is my first experience with [**P5js**](https://p5js.org), wich I enjoyed a lot. P5js, I ❤ you too!
 
 ![Screen.png](/Screen.png)
