@@ -42,8 +42,8 @@ class Ship {
     }
 
 
-    Show = function () {
-        this.Update();
+    Show = function (_playing) {
+        if(_playing) this.Update();
 
         noStroke();
         fill(this.foreColor);
@@ -62,6 +62,7 @@ class Ship {
             2,2,3,3);
         //---------------------------
     }
+
 
     Update = function (){
         this.passedTime+=deltaTime;

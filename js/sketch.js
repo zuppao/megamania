@@ -53,21 +53,22 @@ function setup() {
     this.RepositionShip();
     //frameRate(120);//120
 
-    this.lives=3;
-    this.score=0;
-    this.elapsedPoints=0;
-    
     this.stopGame = true;
-    this.gameStep = GAMESTEPS.RESET;
+    this.gameStep = GAMESTEPS.GAMEOVER;
 
     this.elapsedTime=0;
     this.shipHitElapsedTime=0;
     textFont(this.fontRetro);
-    console.log(this.fontRetro);
 }
 
 function draw() {
-    if(this.gameStep === GAMESTEPS.GAMEOVER) return;
+    if(this.gameStep === GAMESTEPS.GAMEOVER) {
+        background(15);
+        this.GameOver();
+        this.ship.Show(false);
+        this.hud.Show(this.lives,this.score,this.ship.energy);
+        return;
+    }
 
     if(this.gameStep === GAMESTEPS.PAUSED){
         this.ScreenMessage('GAME PAUSED!');
@@ -77,7 +78,7 @@ function draw() {
     noStroke();
     background(15);
 
-    if(this.gameStep === GAMESTEPS.PLAYING) this.Update();
+    //if(this.gameStep === GAMESTEPS.PLAYING) this.Update();
 
     if(this.stopGame){
         this.elapsedTime+=deltaTime;
@@ -121,20 +122,26 @@ function draw() {
                     this.gameStep = GAMESTEPS.FUELLING;
                     this.sfxLoad.play();
                     break;
-                case GAMESTEPS.RESET:                
+                case GAMESTEPS.RESET:
+                    this.lives=3;
+                    this.score=0;
+                    this.elapsedPoints=0;
+                    this.ship.shipHit=false;
+                    this.ship.energy=0;
                     for (var i = 0; i < 6; i++) {
                         this.hamburgers[i] = new Hamburger(width+(100*i),10,1);
                         this.hamburgers[i+6] = new Hamburger(width+(100*i)+50,34,1);
                         this.hamburgers[i+12] = new Hamburger(width+(100*i),58,1);
                     }
-                    this.gameStep = GAMESTEPS.FUELLING;
                     this.sfxLoad.play();
+                    this.gameStep = GAMESTEPS.FUELLING;
                     break;
             }
         }
 
     }else {
         //playing.........
+        this.Update();
 
         // show and move the enemies
         for (var i = 0; i < this.hamburgers.length; i++) {
@@ -187,16 +194,16 @@ function draw() {
             }
         }
 
+        
     }
 
-    this.ship.Show();
+    this.ship.Show(true);
 
     if(this.elapsedPoints>=4000){
         this.elapsedPoints=0;
         this.lives+=1;
     }
     
-    noStroke();
     this.hud.Show(this.lives,this.score,this.ship.energy);
 }
 
@@ -213,7 +220,7 @@ function Update() {
         this.ship.Move(-0.5);
     }
 
-    if(this.ship.energy<=0) this.GameOver();
+    if(this.ship.energy<=0) ShipHit();
         
 
     if(this.hamburgers.length==0){
@@ -227,9 +234,13 @@ function Update() {
 
 
 function keyPressed() {
+    if(key === 'Enter' && this.gameStep === GAMESTEPS.GAMEOVER){
+        this.gameStep = GAMESTEPS.RESET;
+    }
+
     if(this.stopGame) return;
 
-	if ((key === 'ArrowUp' || key === ' ') && this.shipBullet === null) {
+	if ((key === 'ArrowUp' || key === ' ') && this.shipBullet === null && this.gameStep != GAMESTEPS.PAUSED) {
         this.shipBullet = new ShipBullet(this.ship.cannon.x, this.ship.cannon.y);
         this.sfxShipShoot.play();
     }
@@ -241,6 +252,7 @@ function keyPressed() {
             this.gameStep = GAMESTEPS.PLAYING;
         }
     }
+
 }
 
 
