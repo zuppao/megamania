@@ -14,7 +14,7 @@ This is my first experience with [**P5js**](https://p5js.org), wich I enjoyed a 
 
 ![Screen.png](/Screen.png)
 
-Enjoy it: [**Play**](https://rawcdn.githack.com/zuppao/megamania/00141226302b643e4a7b81f28ac4409d6bba1518/Mega.html) 
+Enjoy it: [**Play**](https://rawcdn.githack.com/zuppao/megamania/0533ab0814149d0356f9d2fdcad597a00528089a/Mega.html) 
 
 Hugs!<br />
 Zuppao
